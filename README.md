@@ -1,4 +1,4 @@
-# Visual Genome の画像を扱うためのスクリプト
+# Visual Genome を扱うためのスクリプト
 ---
 
 ## 概要
