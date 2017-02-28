@@ -96,16 +96,14 @@ def extract_bbox_data(json_data_list,
 
     print("Extract Bounding Box Data...")
 
-    bbox = []
-    feature_col = ["Id", "x", "y", "weight", "height"]
-    samples_row = []
-
-    if ids is None:  # Idが指定されない場合はIdの項を削除
-        feature_col.remove("Id")
+    bbox = {}
 
     for jl in jpg_list:
-        for jd in json_data_list:
 
+        samples_row = []
+
+        # jsonデータについて走査
+        for jd in json_data_list:
             jpg_name = int(jl.split(".")[0])
             jd_list_id = int(jd[0])
 
@@ -123,9 +121,7 @@ def extract_bbox_data(json_data_list,
 
                 samples_row.append(samples_col)
 
-    # 1つのリストに統合
-    bbox.append(feature_col)
-    bbox.extend(samples_row)
+        bbox[jl] = samples_row
 
     return bbox
 
@@ -144,7 +140,7 @@ def input_textfile(input_filepath):
 
 
 # 結果を出力する関数
-def output_textfile(result_list, output_dir):
+def output_textfile(result_dict, output_dir):
 
     print("Output result...")
 
@@ -157,16 +153,18 @@ def output_textfile(result_list, output_dir):
 
     # エラー処理: 存在しないディレクトリの作成
     if not os.path.exists(output_dir):
-        print("WARNING: %s does not exist. mkdir" % output_dir)
+        print("  ATTENTION: %s does not exist. mkdir" % output_dir)
         os.mkdir(output_dir)
 
     # 結果を出力
-    for i, rl in enumerate(result_list):
-        txt_id = "{0:06d}.txt".format((i))
+    for key, value in result_dict.items():
+        txt_id = "{0:08d}.txt".format(int(key.split(".")[0]))
         with open(output_dir + txt_id, "w") as f:
-            f.write(" ".join(map(str, rl)))
+            for value_row in value:
+                string = " ".join([str(vr) for vr in value_row])
+                f.write("%s\n" % string)
 
-    print("output to %s" % output_dir)
+    print("Output to %s" % output_dir)
 
 
 # メイン部
@@ -206,12 +204,12 @@ if __name__ == "__main__":
     json_data_list = extract_json_data(json_data, synsets_name)
 
     # boundingboxの形式でデータ抽出
-    bbox_list = extract_bbox_data(json_data_list,
+    bbox_dict = extract_bbox_data(json_data_list,
                                   jpg_list,
                                   synsets_name,
                                   ids=label_num)
 
     # 結果を出力
-    output_textfile(bbox_list, output_dir)
+    output_textfile(bbox_dict, output_dir)
 
     print("%s: DONE\n" % SCRIPT_NAME)
