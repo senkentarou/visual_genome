@@ -4,11 +4,11 @@
 # extract_image.py; 指定した物体を含む画像のリストを出力するスクリプト
 #
 # 使い方: python extract_image.py
-# オプション: [-t 対象物体名(synsets)]
+# オプション: [-s 対象物体名(synsets)]
 #             [-n 画像リストの長さ(数)]
 #             [-o 出力先のファイルパス]
 # * オプションを指定しない場合は,
-#     -t=clock.n.01, -n=100, -o=./results/image_list.txt
+#     -s=clock.n.01, -n=100, -o=./results/image_list.txt
 #   となる.
 #
 
@@ -112,17 +112,17 @@ if __name__ == "__main__":
 
     # 引数取得
     p = argparse.ArgumentParser()
-    p.add_argument("-t", type=str, default="clock.n.01")
+    p.add_argument("-s", type=str, default="clock.n.01")
     p.add_argument("-o", type=str, default="./results/image_list.txt")
-    p.add_argument("-n", type=int, default="100")
+    p.add_argument("-n", type=int, default=100)
     args = p.parse_args()
 
-    synsets_name = args.t
+    synsets_name = args.s
     output_filepath = args.o
     num = args.n
 
     print("Args:")
-    print("  -t; synsets_name: %s" % synsets_name)
+    print("  -s; synsets_name: %s" % synsets_name)
     print("  -o; output_filepath: %s" % output_filepath)
     print("  -n; num: %s" % num)
 
