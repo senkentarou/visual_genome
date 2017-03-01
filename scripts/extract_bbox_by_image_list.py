@@ -158,7 +158,7 @@ def output_textfile(result_dict, output_dir):
 
     # 結果を出力
     for key, value in result_dict.items():
-        txt_id = "{0:08d}.txt".format(int(key.split(".")[0]))
+        txt_id = "%d.txt" % int(key.split(".")[0])
         with open(output_dir + txt_id, "w") as f:
             for value_row in value:
                 string = " ".join([str(vr) for vr in value_row])
